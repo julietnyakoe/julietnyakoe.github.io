@@ -1,0 +1,1402 @@
+<title>Juliet Nyakoe — RevOps</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --bg:#F1F3F3;
+    --surface:#FFFFFF;
+    --surface-2:#E7EAEA;
+    --ink:#151A1E;
+    --ink-soft:#4B555C;
+    --line:rgba(21,26,30,0.13);
+    --line-strong:rgba(21,26,30,0.28);
+    --accent:#C1571B;
+    --accent-ink:#8F4013;
+    --accent-soft:#F1DCC9;
+    --good:#2F7A52;
+    --good-soft:#DCEBE1;
+    --focus:#1C6FB0;
+    --shadow: 0 1px 2px rgba(21,26,30,0.06), 0 8px 24px -12px rgba(21,26,30,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12151A;
+      --surface:#181D22;
+      --surface-2:#20262C;
+      --ink:#EAEDEF;
+      --ink-soft:#9DA8AF;
+      --line:rgba(234,237,239,0.14);
+      --line-strong:rgba(234,237,239,0.30);
+      --accent:#E38A4B;
+      --accent-ink:#F3C39A;
+      --accent-soft:#3A2A1E;
+      --good:#5FAE84;
+      --good-soft:#1C2F26;
+      --focus:#5CA6E0;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12151A;
+    --surface:#181D22;
+    --surface-2:#20262C;
+    --ink:#EAEDEF;
+    --ink-soft:#9DA8AF;
+    --line:rgba(234,237,239,0.14);
+    --line-strong:rgba(234,237,239,0.30);
+    --accent:#E38A4B;
+    --accent-ink:#F3C39A;
+    --accent-soft:#3A2A1E;
+    --good:#5FAE84;
+    --good-soft:#1C2F26;
+    --focus:#5CA6E0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+    outline:2px solid var(--focus);
+    outline-offset:2px;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:0.72rem;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    flex:none;
+  }
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding-inline:24px;
+  }
+  .muted{color:var(--ink-soft);}
+
+  /* ---------- header ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:920px;margin:0 auto;padding-inline:24px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;height:64px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;
+    white-space:nowrap;
+    background:none;border:none;padding:0;cursor:pointer;color:var(--ink);
+  }
+  .brand svg{flex:none;}
+  nav.tabs{
+    display:flex;gap:4px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.74rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    background:none;border:none;cursor:pointer;
+    color:var(--ink-soft);
+    padding:8px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+    transition:background 0.15s, color 0.15s;
+  }
+  nav.tabs button:hover{color:var(--ink);}
+  nav.tabs button[aria-current="page"]{
+    background:var(--surface-2);
+    color:var(--ink);
+  }
+
+  main{min-height:60vh;}
+  .view{padding-block:56px 96px;}
+  .view.tight{padding-block:40px 96px;}
+
+  /* ---------- hero ---------- */
+  .hero{padding-block:12px 40px;}
+  .hero h1{font-size:clamp(2.1rem, 5vw, 3rem); line-height:1.08;}
+  .hero .role{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.92rem;
+    color:var(--accent-ink);
+    margin-top:10px;
+    letter-spacing:0.02em;
+  }
+  .hero p.lede{
+    max-width:56ch;
+    font-size:1.1rem;
+    color:var(--ink-soft);
+    margin-top:18px;
+  }
+  .node-mark{display:block;margin-bottom:18px;}
+
+  .cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:11px 18px;
+    border-radius:8px;
+    border:1px solid var(--line-strong);
+    background:var(--surface);
+    cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:border-color .15s, background .15s, transform .15s;
+  }
+  .btn:hover{border-color:var(--accent); transform:translateY(-1px);}
+  .btn.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .btn.primary:hover{background:var(--accent-ink); border-color:var(--accent-ink);}
+
+  /* ---------- proof strip ---------- */
+  .proof{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:40px;
+  }
+  .proof .cell{
+    background:var(--surface);
+    padding:22px 20px;
+  }
+  .proof .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:1.5rem;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+  }
+  .proof .num b{color:var(--accent-ink);}
+  .proof .cap{margin-top:8px;font-size:0.86rem;color:var(--ink-soft);}
+  @media (max-width:640px){
+    .proof{grid-template-columns:1fr;}
+  }
+
+  section.block{margin-top:64px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap;}
+  .section-head h2{font-size:1.5rem;}
+
+  /* ---------- what-i-do list ---------- */
+  .do-list{display:grid;gap:14px;}
+  .do-list .item{
+    display:flex;gap:14px;
+    padding:16px 0;
+    border-top:1px solid var(--line);
+  }
+  .do-list .item:first-child{border-top:none;}
+  .do-list .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);
+    flex:none;width:6.5em;padding-top:2px;
+  }
+
+  /* ---------- work cards ---------- */
+  .work-grid{display:grid;gap:14px;}
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px 22px;
+    display:block;
+    text-decoration:none;
+    color:var(--ink);
+    cursor:pointer;
+    transition:border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .card:hover{border-color:var(--line-strong); box-shadow:var(--shadow); transform:translateY(-2px);}
+  .card .row1{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .card h3{font-size:1.12rem;margin-top:6px;}
+  .card .hook{margin-top:8px;color:var(--ink-soft);font-size:0.96rem;}
+  .card .go{font-family:'IBM Plex Mono',monospace;font-size:0.76rem;color:var(--accent-ink);white-space:nowrap;}
+  .pill{
+    font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.05em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;border:1px solid var(--line-strong);color:var(--ink-soft);
+  }
+  .pill.deep{border-color:var(--accent); color:var(--accent-ink);}
+
+  .featured-strip{display:grid;gap:14px;}
+
+  /* ---------- case study detail ---------- */
+  .back{
+    font-family:'IBM Plex Mono',monospace;font-size:0.78rem;
+    background:none;border:none;cursor:pointer;color:var(--ink-soft);
+    display:inline-flex;align-items:center;gap:6px;padding:0;margin-bottom:22px;
+  }
+  .back:hover{color:var(--ink);}
+  .cs-head h1{font-size:clamp(1.7rem,4vw,2.3rem);}
+  .cs-head .hook{margin-top:14px;font-size:1.12rem;color:var(--ink-soft);max-width:58ch;}
+  .cs-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;}
+  .cs-meta .m{font-family:'IBM Plex Mono',monospace;font-size:0.74rem;color:var(--ink-soft);}
+  .cs-meta .m b{color:var(--ink);}
+
+  .cs-section{margin-top:46px;padding-top:2px;}
+  .cs-section .num{
+    font-family:'IBM Plex Mono',monospace;font-size:0.76rem;color:var(--accent-ink);
+    display:block;margin-bottom:8px;letter-spacing:0.04em;
+  }
+  .cs-section h3{font-size:1.2rem;margin-bottom:14px;}
+  .cs-section p{margin:0 0 12px 0;max-width:66ch;}
+  .cs-section ul{margin:0 0 12px 0;padding-left:1.2em;max-width:66ch;}
+  .cs-section li{margin-bottom:6px;}
+  .caveat{
+    font-size:0.88rem;color:var(--ink-soft);
+    border-left:2px solid var(--line-strong);
+    padding-left:14px;margin-top:16px;max-width:60ch;
+  }
+  .role-badge{
+    display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+    text-transform:uppercase;letter-spacing:0.04em;
+    padding:4px 10px;border-radius:6px;margin-bottom:10px;
+    background:var(--good-soft); color:var(--good);
+  }
+  .role-badge.partner{background:var(--surface-2); color:var(--ink-soft);}
+  .note-tag{
+    display:inline-block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;
+    color:var(--ink-soft); border:1px dashed var(--line-strong); padding:4px 10px; border-radius:6px;
+  }
+
+  /* ---------- flow diagram ---------- */
+  .flow{margin-top:6px;border-left:2px solid var(--line-strong);padding-left:22px;display:grid;gap:0;}
+  .flow-step{position:relative;padding-bottom:22px;}
+  .flow-step:last-child{padding-bottom:0;}
+  .flow-step::before{
+    content:"";position:absolute;left:-27.5px;top:4px;width:9px;height:9px;border-radius:50%;
+    background:var(--accent); border:2px solid var(--bg);
+  }
+  .flow-node{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:12px 16px;
+  }
+  .flow-node .t{font-weight:600;font-size:0.95rem;}
+  .flow-node .d{margin-top:4px;font-size:0.86rem;color:var(--ink-soft);}
+  .flow-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+  .flow-branch{
+    background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  }
+  .flow-branch .t{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--accent-ink);}
+  .flow-branch .d{margin-top:6px;font-size:0.85rem;color:var(--ink-soft);}
+
+  /* ---------- tool-frame chrome (echoes real product UI, sanitized) ---------- */
+  .tool-frame{
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    background:var(--surface); margin-top:4px;
+  }
+  .tool-bar{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .tool-dots{display:flex;gap:6px;flex:none;}
+  .tool-dots span{width:8px;height:8px;border-radius:50%;background:var(--line-strong);display:block;}
+  .tool-name{
+    font-family:'IBM Plex Mono',monospace;font-size:0.7rem;font-weight:600;letter-spacing:0.02em;
+    padding:3px 9px;border-radius:5px;color:#fff;white-space:nowrap;
+  }
+  .tool-crumb{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tool-body{padding:20px;}
+  .tool-sanitized{
+    font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--ink-soft);
+    margin-left:auto;white-space:nowrap;
+  }
+
+  /* ---------- dashboard tiles (illustrative, sanitized) ---------- */
+  .dash-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;}
+  .dash-tile{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .dash-tile .k{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;}
+  .dash-tile .v{font-family:'IBM Plex Mono',monospace;font-size:1.15rem;margin-top:5px;font-variant-numeric:tabular-nums;}
+  .dash-tile .bar{margin-top:9px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden;}
+  .dash-tile .bar > i{display:block;height:100%;background:var(--accent);}
+
+  /* ---------- about timeline ---------- */
+  .timeline{border-left:2px solid var(--line-strong);padding-left:22px;display:grid;gap:26px;margin-top:8px;}
+  .t-item{position:relative;}
+  .t-item::before{
+    content:"";position:absolute;left:-27.5px;top:4px;width:9px;height:9px;border-radius:50%;
+    background:var(--ink-soft);border:2px solid var(--bg);
+  }
+  .t-item.current::before{background:var(--accent);}
+  .t-item .when{font-family:'IBM Plex Mono',monospace;font-size:0.76rem;color:var(--ink-soft);}
+  .t-item .what{margin-top:4px;font-weight:600;}
+  .t-item .where{margin-top:2px;font-size:0.9rem;color:var(--ink-soft);}
+
+  /* ---------- skills ---------- */
+  .skill-groups{display:grid;gap:22px;}
+  .skill-group .label{font-family:'IBM Plex Mono',monospace;font-size:0.74rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.05em;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:8px 12px;font-size:0.9rem;
+  }
+  .cap-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .cap-pill{
+    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;
+    background:var(--accent-soft); color:var(--accent-ink);
+    padding:6px 11px;border-radius:999px;
+  }
+
+  /* ---------- certifications ---------- */
+  .cert-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  .cert-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .cert-card .t{font-weight:600;}
+  .cert-card .s{margin-top:4px;font-size:0.86rem;color:var(--ink-soft);}
+
+  /* ---------- contact ---------- */
+  .contact-box{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:34px 30px;margin-top:20px;
+  }
+  .contact-box p{max-width:52ch;color:var(--ink-soft);}
+  .copy-hint{font-family:'IBM Plex Mono',monospace;font-size:0.76rem;color:var(--good);margin-top:10px;min-height:1.2em;}
+
+  /* ---------- HubSpot-style workflow canvas mock ---------- */
+  .hs-canvas{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+  .hs-topbar{background:#1C1F26;color:#fff;padding:12px 18px;text-align:center;}
+  .hs-topbar .title{font-family:'IBM Plex Sans',sans-serif;font-size:0.86rem;font-weight:500;}
+  .hs-topbar .sub{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:#9AA3AF;margin-top:3px;}
+  .hs-canvas-body{background:var(--bg);padding:28px 18px;display:flex;flex-direction:column;align-items:center;}
+  .hs-node{background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:12px 16px;min-width:220px;max-width:340px;text-align:left;box-shadow:var(--shadow);}
+  .hs-node .icon-row{display:flex;align-items:center;gap:8px;}
+  .hs-node .icon{width:22px;height:22px;border-radius:50%;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex:none;}
+  .hs-node .label{font-size:0.86rem;font-weight:600;}
+  .hs-node .desc{margin-top:6px;font-size:0.82rem;color:var(--ink-soft);}
+  .hs-connector{width:2px;height:26px;background:var(--line-strong);}
+  .hs-plus{width:18px;height:18px;border-radius:50%;border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--ink-soft);background:var(--surface);margin:2px 0;}
+  .hs-branches{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:0;}
+  .hs-branch-col{display:flex;flex-direction:column;align-items:center;}
+  .hs-outcome{background:var(--surface-2);border:1px solid var(--line);border-radius:20px;padding:8px 16px;font-size:0.82rem;font-weight:600;text-align:center;}
+  .hs-outcome-detail{margin-top:8px;font-size:0.78rem;color:var(--ink-soft);text-align:center;max-width:190px;}
+
+  /* ---------- Calendly-style routing list mock ---------- */
+  .cal-mock{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:22px 22px 8px;}
+  .cal-mock .crumb-link{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--focus);}
+  .cal-mock h4{font-family:'IBM Plex Sans',sans-serif;font-size:1.05rem;font-weight:600;margin-top:10px;}
+  .cal-mock .edited{font-size:0.78rem;color:var(--ink-soft);margin-top:3px;}
+  .cal-tabs{display:flex;gap:18px;margin-top:16px;border-bottom:1px solid var(--line);}
+  .cal-tabs span{font-size:0.84rem;padding-bottom:9px;color:var(--ink-soft);}
+  .cal-tabs span.active{color:var(--ink);border-bottom:2px solid var(--accent);font-weight:600;}
+  .cal-routes-head{display:flex;justify-content:space-between;align-items:center;margin-top:18px;}
+  .cal-route{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line);}
+  .cal-route:first-of-type{border-top:none;}
+  .cal-route .n{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--ink-soft);flex:none;width:1.3em;padding-top:2px;}
+  .cal-route .body{flex:1;}
+  .cal-route .rule{font-size:0.86rem;color:var(--ink-soft);}
+  .cal-route .rule b{color:var(--ink);font-weight:600;}
+  .cal-dest{margin-top:10px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 8px 8px 0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .cal-dest .dt{font-weight:600;font-size:0.92rem;}
+  .cal-dest .dm{font-size:0.78rem;color:var(--ink-soft);margin-top:2px;}
+  .cal-avatars{display:flex;}
+  .cal-avatars span{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:600;color:#fff;margin-left:-6px;border:2px solid var(--surface-2);}
+
+  /* ---------- Salesforce-style dashboard mock ---------- */
+  .sf-dash{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+  .sf-head{padding:12px 18px;border-bottom:1px solid var(--line);}
+  .sf-head .t{font-weight:600;font-size:0.92rem;}
+  .sf-head .s{font-size:0.76rem;color:var(--ink-soft);margin-top:3px;max-width:60ch;}
+  .sf-head .meta{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:var(--ink-soft);margin-top:6px;}
+  .sf-band{background:#37326E;color:#fff;font-size:0.74rem;font-weight:600;letter-spacing:0.02em;padding:7px 18px;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sf-band{background:#4A4390;}}
+  :root[data-theme="dark"] .sf-band{background:#4A4390;}
+  .sf-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--line);}
+  .sf-tile{background:var(--surface);padding:12px 14px;}
+  .sf-tile .k{font-size:0.68rem;color:var(--ink-soft);}
+  .sf-tile .v{font-family:'IBM Plex Mono',monospace;font-size:1.2rem;color:var(--good);margin-top:4px;font-variant-numeric:tabular-nums;}
+  .sf-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);}
+  .sf-chart{background:var(--surface);padding:12px 14px;}
+  .sf-chart .k{font-size:0.68rem;color:var(--ink-soft);margin-bottom:8px;}
+  .sf-bars{display:flex;align-items:flex-end;gap:5px;height:60px;}
+  .sf-bars i{display:block;flex:1;background:#6C7FE0;border-radius:2px 2px 0 0;}
+  .sf-mini-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+  .sf-mini-table th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line-strong);color:var(--ink-soft);font-weight:500;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.03em;}
+  .sf-mini-table td{padding:7px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;}
+  .sf-multi-label{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--ink-soft);margin:22px 0 8px;}
+  .sf-multi-label:first-child{margin-top:0;}
+
+  /* ---------- HubSpot environment/deploy pipeline mock (Sandbox) ---------- */
+  .hs-env-body{background:var(--bg);padding:30px 20px;}
+  .hs-env-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;}
+  .hs-env-card{background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;padding:14px 18px;min-width:130px;text-align:center;box-shadow:var(--shadow);}
+  .hs-env-card .t{font-weight:600;font-size:0.9rem;}
+  .hs-env-card .d{margin-top:4px;font-size:0.76rem;color:var(--ink-soft);}
+  .hs-env-gate{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;background:var(--accent-soft);color:var(--accent-ink);padding:6px 10px;border-radius:6px;text-align:center;max-width:110px;}
+  .hs-env-arrow{color:var(--ink-soft);font-size:1.1rem;padding:0 10px;flex:none;}
+  @media (max-width:640px){ .hs-env-arrow{transform:rotate(90deg);padding:6px 0;} .hs-env-row{flex-direction:column;} }
+
+  /* ---------- Amplemarket sequence-builder mock ---------- */
+  .amp-mock{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);}
+  .amp-top{background:#211A4D;color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .amp-top .t{font-size:0.86rem;font-weight:500;}
+  .amp-top .badge{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;background:rgba(255,255,255,0.14);padding:3px 9px;border-radius:5px;}
+  .amp-cols{display:grid;grid-template-columns:1.1fr 1fr;gap:0;}
+  @media (max-width:640px){ .amp-cols{grid-template-columns:1fr;} }
+  .amp-col{padding:16px 18px;}
+  .amp-col.editor{border-right:1px solid var(--line);}
+  @media (max-width:640px){ .amp-col.editor{border-right:none;border-bottom:1px solid var(--line);} }
+  .amp-toggles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .amp-toggle{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;background:var(--surface-2);color:var(--ink-soft);padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;}
+  .amp-toggle .dot{width:6px;height:6px;border-radius:50%;background:#4C3AE3;}
+  .amp-body-text{font-size:0.82rem;color:var(--ink-soft);line-height:1.6;white-space:pre-line;}
+  .amp-col.preview{background:var(--surface-2);}
+  .amp-preview-meta{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;color:var(--ink-soft);margin-bottom:8px;}
+  .amp-preview-body{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:0.82rem;line-height:1.6;color:var(--ink);white-space:pre-line;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 24px;
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.74rem;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:600px){
+    .header-inner{height:auto;flex-direction:column;align-items:stretch;padding-block:10px;gap:8px;}
+    nav.tabs{justify-content:flex-start;}
+  }
+</style>
+
+<div class="site-header">
+  <div class="header-inner">
+    <button class="brand" onclick="go('home')" aria-label="Home">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="4" cy="16" r="2.3" fill="var(--accent)"/>
+        <circle cx="16" cy="4" r="2.3" fill="var(--ink)"/>
+        <circle cx="16" cy="16" r="2.3" fill="var(--ink)"/>
+        <path d="M6 15 L14 5.5 M6.3 16 L13.7 16" stroke="var(--line-strong)" stroke-width="1.4"/>
+      </svg>
+      Juliet Nyakoe
+    </button>
+    <nav class="tabs" id="tabs">
+      <button data-route="home">Home</button>
+      <button data-route="work">Work</button>
+      <button data-route="about">About</button>
+      <button data-route="skills">Skills &amp; Systems</button>
+      <button data-route="certifications">Certifications</button>
+      <button data-route="contact">Contact</button>
+    </nav>
+  </div>
+</div>
+
+<main id="view-root"></main>
+
+<footer>Juliet Nyakoe · Revenue Operations &amp; GTM Systems · Case studies use sanitized, illustrative data where noted</footer>
+
+<script>
+/* ============ DATA ============ */
+
+const PROJECTS = [
+  {
+    id:"lead-scoring", tier:"deep", arc:"Scale",
+    platform:{name:"HubSpot", color:"#E85C33"},
+    crumb:"Contacts > Lead Scoring > Property Rules",
+    uiMock:{type:"hubspot", title:"Lead Routing | Lead Score Threshold | Workflow",
+      branchLabel:"6. Branch",
+      branchDesc:"Go to <b>MQL Path</b> if these criteria are met:<br><b>Total Lead Score</b> is greater than the qualification threshold",
+      outcomes:[
+        {t:"MQL Path", d:"Lead Stage: Open · Regional AE routing · Slack + email notification"},
+        {t:"Nurture Path", d:"Lead Stage: New · Marketing nurture"}
+      ]
+    },
+    title:"HubSpot Lead Scoring Migration & Optimization",
+    hook:"I rebuilt a weak lead-scoring model so Sales received fewer irrelevant MQLs while stronger buying signals were prioritized.",
+    role:{type:"owned", text:"I audited the existing scoring model, proposed the replacement logic, and carried it through build, testing, and activation. VP Marketing and VP Sales reviewed my proposal and gave feedback before I built it."},
+    problem:"HubSpot required a migration to a new scoring model ahead of a fixed deadline. The existing model was missing good leads while still surfacing poor-quality ones — Sales was getting noise, and Marketing had no reliable way to tell a real buying signal from a weak one.",
+    solution:"I redesigned the scoring model around three input types — demographic, firmographic, and behavioral — combined into a single weighted score, with a clear qualification threshold that decided what happened to a lead next.",
+    flow:[
+      {type:"node", t:"Demographic + firmographic + behavioral inputs", d:"Combined into a single weighted score"},
+      {type:"branch", items:[
+        {t:"Above threshold", d:"MQL · Lead Stage: Open · Regional AE routing · Slack + email notification"},
+        {t:"Below threshold", d:"Lead · Lead Stage: New · Marketing nurture"}
+      ]}
+    ],
+    technicalIntro:"I built the score as a set of weighted tiers rather than a flat checklist, so the strongest buying signals would clearly outrank weak ones instead of a lead scraping by on volume:",
+    technicalList:[
+      "Highest weight — exact matches to the five target verticals, and titles signaling product, data, engineering, research, AI/ML, or computer-vision roles.",
+      "High weight — the highest-intent behavioral actions: live webinar attendance, live chat, submitting Contact Us, appearing on the MQL event list or a LinkedIn Lead Ads list, an inbound call, or core marketing-target-list membership.",
+      "Moderate-high weight — executive/senior titles, and high-value content list membership.",
+      "Moderate weight — director/manager titles, geographies with strong likelihood of doing business, webinar registration, and multiple content downloads.",
+      "Lower weight — lighter engagement: blog/newsletter activity, a single download, marketing-email engagement, high-value page visits.",
+      "Disqualifying, regardless of positive score — quarantined emails, competitor/job-seeker indicators, ineligible geographies, opt-outs, disqualification categories, free/personal domains, internal-domain matches, and known competitor domains."
+    ],
+    technicalProcess:"Process: audit → proposal → VP Marketing/VP Sales review → build and migrate → test against existing contacts with HubSpot's native scoring test → activate → monitor.",
+    technicalNote:"The exact weightings are omitted by design — this is a professional portfolio, not an internal playbook. The tiering shows the reasoning without exposing the underlying formula.",
+    resultList:[
+      "Migration completed before the deadline; the old model was fully retired",
+      "MQL volume rose from roughly 10/week to roughly 18/week — about an 80% increase",
+      "Sales reported better-quality MQLs; irrelevant leads reaching Sales dropped significantly",
+      "Missed or incorrectly scored leads decreased; Marketing/Sales alignment improved",
+      "Historical contacts and leads were not retroactively rescored"
+    ],
+    caveat:"Not claiming: a revenue or pipeline increase, an exact percentage reduction in irrelevant leads, or a data-accuracy percentage — these weren't measured.",
+    takeaway:"This project shows the pattern behind most of my work: audit first, propose a change with stakeholder sign-off before building it, implement with clear logic rather than a black box, test before activating, and be precise about what the data can and can't tell you afterward."
+  },
+  {
+    id:"contact-governance", tier:"deep", arc:"Govern",
+    platform:{name:"HubSpot", color:"#E85C33"},
+    crumb:"Contacts > Lists > Non-Marketing Workflow",
+    uiMock:{type:"hubspot", title:"Contact Lifecycle | Non-Marketing Workflow",
+      branchLabel:"4. Branch",
+      branchDesc:"Go to <b>Set Non-Marketing</b> if these criteria are met:<br><b>Last activity</b> &gt; 365 days AND <b>last engagement</b> &gt; 365 days or unknown AND <b>email domain</b> is free/personal",
+      outcomes:[
+        {t:"Set Non-Marketing", d:"Existing: set manually · New: workflow-enrolled · Blocked from syncing to Salesforce"},
+        {t:"Remain Marketing", d:"Counts toward the 80k contact limit"}
+      ]
+    },
+    title:"HubSpot Marketing Contact Optimization & Database Governance",
+    hook:"I created headroom in an 80,000-contact environment before capacity became a business problem.",
+    role:{type:"owned", text:"I identified the risk, defined the cleanup logic, built the workflows, and tested before activation. VP Marketing and Director RevOps reviewed and approved the approach before it went live."},
+    problem:"HubSpot's marketing-contact tier was capped at 80,000. We were sitting at roughly 74,000 — close enough that continued growth from forms, paid search/social, organic search, webinars, and events would have pushed us over it. I identified this capacity risk proactively, before it became urgent.",
+    solution:"Rather than a blanket purge, I built layered qualification logic to separate contacts that should stay \"marketing\" from ones that shouldn't — based on inactivity and free/personal email domains — and applied it to both the existing database and new incoming contacts.",
+    flow:[
+      {type:"node", t:"New or existing contact evaluated", d:""},
+      {type:"node", t:"Inactivity check", d:"last activity > 365 days AND (last engagement > 365d or unknown) AND (recent conversion > 365d or unknown) — plus hard bounces, unsubscribes, prolonged inactivity"},
+      {type:"node", t:"Free/personal email-domain check", d:""},
+      {type:"branch", items:[
+        {t:"Marketing contact", d:"Counts toward the 80k limit"},
+        {t:"Non-marketing contact", d:"Existing: set manually · New: workflow-enrolled"}
+      ]},
+      {type:"node", t:"Free-domain leads blocked from syncing to Salesforce", d:""}
+    ],
+    technicalIntro:"",
+    technicalList:[
+      "The broader cleanup/optimization population was roughly 20,000 contacts; within that, I identified about 4,200 using free or personal email domains as a distinct subset.",
+      "For contacts already in the database, I manually set qualifying ones to Non-Marketing through the Contacts dashboard.",
+      "For new and incoming contacts, I built contact-based workflows using enrollment and list criteria to automatically set marketing contact status to Non-Marketing going forward.",
+      "A separate workflow used the free-email list specifically to prevent those contacts from syncing to Salesforce at all.",
+      "I tested against a small sample before activating at scale; the approach was signed off by VP Marketing and Director RevOps."
+    ],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "Marketing contacts went from roughly 74,000 to roughly 60,000 — a reduction of about 14,000, or roughly 19%",
+      "This created meaningful headroom under the 80,000 limit",
+      "Fewer irrelevant contacts continued entering Salesforce going forward",
+      "Overall database hygiene improved"
+    ],
+    caveat:"Not all ~20,000 contacts in the broader cleanup population were free-email contacts (that subset was ~4,200), and not all were moved to non-marketing. Not claiming a dollar savings figure or an exact count of contacts prevented from reaching Salesforce.",
+    takeaway:"This project is less about the cleanup itself and more about catching a capacity problem before it became a crisis, then solving it with layered, defensible logic rather than a one-time manual purge that would have needed repeating."
+  },
+  {
+    id:"pipeline-health", tier:"deep", arc:"Analyze",
+    platform:{name:"Salesforce", color:"#0D9DDB"},
+    crumb:"Reports > Inbound Funnel Dashboard",
+    uiMock:{type:"salesforce-multi", dashboards:[
+      {
+        label:"1 · Top of funnel",
+        title:"Inbound Lead Funnel Overview — Current FY",
+        subtitle:"Tracks inbound lead volume and quality for the current fiscal year, including DQs, conversion rate, and Calendly meetings booked.",
+        sections:[
+          {band:"Total Leads & Calendly Bookings", tiles:[
+            {k:"Total Leads", v:"210"},
+            {k:"Marketing Qualified", v:"92"},
+            {k:"Calendly Bookings", v:"28"},
+            {k:"Converted Leads", v:"9"}
+          ]},
+          {band:"Leads by Source", charts:[
+            {k:"Website / Organic / Paid / Other", bars:[95,55,35,15]}
+          ]},
+          {band:"Leads by Status", table:{
+            head:["Lead status","Record count"],
+            rows:[["New","38"],["Working — contacted","61"],["Qualified","71"],["DQ — job seeker","12"],["DQ — competitor","9"],["DQ — not supported","19"]]
+          }}
+        ]
+      },
+      {
+        label:"2 · MQL progression",
+        title:"Inbound MQLs — Current & Previous FY",
+        subtitle:"Marketing Qualified Leads and stage-to-stage conversion rates from MQL through Won.",
+        sections:[
+          {band:"Stage-to-Stage Conversion (%)", tiles:[
+            {k:"MQL → Discovery", v:"12%"},
+            {k:"Discovery → Validation", v:"58%"},
+            {k:"Validation → Analysis", v:"64%"},
+            {k:"Analysis → Proposal", v:"46%"},
+            {k:"Proposal → Contracting", v:"52%"},
+            {k:"Contracting → Won", v:"85%"}
+          ]},
+          {band:"Record Count by Stage", tiles:[
+            {k:"MQL", v:"1.2K"},
+            {k:"Discovery", v:"142"},
+            {k:"Validation", v:"82"},
+            {k:"Analysis", v:"53"},
+            {k:"Proposal", v:"27"},
+            {k:"Won", v:"12"}
+          ]}
+        ]
+      },
+      {
+        label:"3 · Pipeline & revenue",
+        title:"Inbound Pipeline & Deal Metrics — Current FY",
+        subtitle:"Overview of inbound opportunities showing pipeline and booked metrics for the current fiscal year.",
+        sections:[
+          {band:"IB Booked & Pipeline Deals", tiles:[
+            {k:"Opps in Pipeline (TCV)", v:"$4.2M"},
+            {k:"Total Opps in Pipeline", v:"14"},
+            {k:"Booked Opps (TCV)", v:"$2.0M"},
+            {k:"# Booked Opps", v:"16"}
+          ]},
+          {band:"IB Performance Metrics", tiles:[
+            {k:"Qualification Cycle", v:"34d"},
+            {k:"Sales Cycle", v:"64d"},
+            {k:"Avg. Deal Size", v:"$310K"},
+            {k:"Win Rate", v:"16%"}
+          ]},
+          {band:"IB Deal Stages by Quarter", charts:[
+            {k:"Validated Opps", bars:[55,70,40,80,95]},
+            {k:"Analyzed Opps", bars:[35,60,50,20,90]},
+            {k:"Proposed Opps", bars:[90,15,80,35,25]}
+          ]}
+        ]
+      }
+    ]},
+    title:"Pipeline Health & Inbound Funnel Reporting",
+    hook:"I replaced fragmented Salesforce reporting with a shared view of the inbound funnel from lead through closed opportunity.",
+    role:{type:"partner", text:"I owned the reporting layer: fresh Salesforce reports and dashboards, standardized filters and logic, tracing figures back to source records, validation, and weekly subscriptions. I did not change the Salesforce data model or the HubSpot–Salesforce integration — that sat outside this project's scope."},
+    problem:"Leadership, Sales, and Marketing had no single standardized view of pipeline health. Individuals were building their own reports and dashboards, which often meant different people were looking at different numbers for what should have been the same question.",
+    solution:"I designed one standardized reporting structure covering the full inbound funnel — from lead through closed opportunity — split into three linked dashboard areas, so everyone could work from the same source instead of reconciling separate versions.",
+    flow:[
+      {type:"node", t:"HubSpot: inbound lead / MQL activity", d:"Integrates with Salesforce"},
+      {type:"node", t:"Salesforce: source of truth for downstream pipeline", d:""},
+      {type:"branch", items:[
+        {t:"Inbound Lead Funnel", d:"Total leads, lifecycle stage, Calendly bookings, owner/status/source, converted leads"},
+        {t:"Inbound MQLs & Conversions", d:"MQL → Discovery → Validation → Analysis → Proposal → Contracting → Won, by grade/source/lost reason/stage"},
+        {t:"Pipeline & Deal Metrics", d:"Opportunities & revenue, cycle lengths, average deal size, win rate, stage counts"}
+      ]},
+      {type:"node", t:"Shared dashboard · weekly subscription", d:""}
+    ],
+    technicalIntro:"",
+    technicalList:[
+      "Inbound Lead Funnel: total leads, lifecycle stage, Calendly-booked meetings, lead owner, status, source, and converted leads.",
+      "Inbound MQLs & conversions: the full MQL progression broken down by grade, source, source detail, lost reason, and opportunity stage, including which opportunities were created at Discovery.",
+      "Conversion metrics: every stage transition from MQL through Won, so drop-off could be seen at each step rather than only at the end.",
+      "Pipeline/deal metrics: current- and next-quarter inbound opportunities and revenue, booked opportunities, qualification/sales/total cycle lengths, average deal size, win rate, stage counts.",
+      "Process: audited existing ad hoc reports, standardized filters/logic, traced numbers back to source records and fields, validated final figures, published as a shared resource, set up weekly subscriptions."
+    ],
+    technicalProcess:"",
+    technicalNote:"",
+    illustrativeNote:"Illustrative Portfolio Mockup — Data Sanitized: any dashboard shown here is a recreated mockup with anonymized data, not the real Salesforce instance.",
+    resultList:[
+      "Dashboards became the common source Leadership, Sales, and Marketing referenced, in place of scattered self-built reports",
+      "Fewer individually created reports and dashboards persisted after rollout",
+      "Clearer, standardized MQL → Won tracking, including visibility into disqualification and drop-off points"
+    ],
+    caveat:"Improvements in accuracy, consistency, time saved, and adoption were real and observed, but exact figures weren't formally measured — described qualitatively rather than with invented numbers.",
+    takeaway:"This project shows analytical rigor as much as reporting output: building a shared source of truth meant tracing every number back to its source and reconciling it — and knowing where my ownership stopped is part of that judgment."
+  },
+  {
+    id:"demandbase", tier:"deep", arc:"Decide",
+    platform:{name:"Demandbase", color:"#1B8A7A"},
+    crumb:"Admin > Keyword Sets > Tenant Review",
+    title:"Demandbase Tenant Review, Optimization & Decommissioning",
+    hook:"I turned a noisy GTM-intent platform into a value question: was it actually worth keeping?",
+    role:{type:"partner", text:"I owned the audit, the dashboard/alert rebuild, the fresh keyword upload, Sales training, and decommission execution. I partnered with the Demandbase TAM, with Marketing (who rewrote the keyword list itself), and with VP Marketing, who made the final decision after reviewing the evidence I gathered."},
+    problem:"I inherited a Demandbase environment with real configuration and data-quality problems: roughly 4,700 keywords across 54 sets, with about 4,600 duplicates. Scoring treated every keyword equally, inflating apparent intent. Web tracking only picked up explicitly listed URLs, and bot-inflated opens/clicks distorted engagement further. Salesforce sync around deleted categories caused confusing failures, and some fields weren't actually being calculated by Demandbase at all.",
+    solution:"I treated this as a value question rather than a configuration problem: gather real usage evidence from the people meant to benefit, fix what was fixable, and let the evidence — not intuition — determine whether continued investment was justified.",
+    flow:[
+      {type:"node", t:"Inherited environment", d:""},
+      {type:"node", t:"Audit", d:"Configuration, data quality, signal quality"},
+      {type:"node", t:"User evidence", d:"AE + Sector Leader survey, qualitative feedback"},
+      {type:"node", t:"Value decision", d:"VP Marketing, based on evidence gathered"},
+      {type:"node", t:"Decommission", d:"Licenses removed, subscriptions stopped, integrations disconnected"}
+    ],
+    technicalIntro:"Once Marketing rewrote the keyword list to remove duplication and improve targeting, I uploaded it and rebuilt dashboards, subscriptions, and Slack alerts around it. Sales received about a month of training, and I monitored notification usage afterward. Alongside the technical cleanup, I ran a structured usage survey with 8 respondents — 4 Account Executives and 4 Sector Leaders:",
+    technicalTable:[
+      ["Group","Usage frequency","Perceived deal impact"],
+      ["AEs (4)","Monthly: 1 · Rarely: 2 · Weekly: 1","All rated impact Negative"],
+      ["Sector Leaders (4)","Never: 1 · Rarely: 1 · Weekly: 2","3 Neutral, 1 Positive"]
+    ],
+    technicalList:[
+      "7 of 8 respondents said the platform had no effect on deal outcomes (1 unclear).",
+      "6 of 8 said removing it entirely would have no impact on their work (2 said some impact).",
+      "Consistent qualitative feedback: conceptually useful but not enough Sales return — signals were broad and company-level with no individual contact visibility, EMEA usage was restricted, noise was high, it overlapped with Amplemarket, and it read as more useful to Marketing than Sales."
+    ],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "No measurable improvement in usage or perceived value was established before the decommission decision, despite the cleanup work",
+      "VP Marketing reviewed the evidence and made the decision to decommission",
+      "Licenses removed, subscriptions stopped, and integrations disconnected two days before decommission"
+    ],
+    caveat:"I did not personally rewrite the full keyword list (Marketing did — I uploaded and configured it), I'm not claiming a measured improvement that didn't materialize, no revenue/pipeline impact is claimed, and I did not make the decommission decision alone.",
+    takeaway:"This is a technology-evaluation story more than a technical one: gathering real evidence from the people meant to use a tool, being willing to recommend decommissioning something I'd invested effort into improving, and executing that decommission cleanly rather than letting it linger as sunk cost."
+  },
+  {
+    id:"sandbox", tier:"deep", arc:"Protect",
+    platform:{name:"HubSpot", color:"#E85C33"},
+    crumb:"Settings > Sandboxes > Deploy to Production",
+    uiMock:{type:"hs-env", title:"Standard Sandbox → Production | Deploy Pipeline",
+      stages:[
+        {label:"Sandbox", d:"Synced from Production", kind:"env"},
+        {label:"Manual QA", d:"Workflows, forms, properties, lists", kind:"env"},
+        {label:"Dependency check", kind:"gate"},
+        {label:"Super Admin review", kind:"gate"},
+        {label:"Production", d:"Live environment", kind:"env"}
+      ]
+    },
+    title:"HubSpot Standard Sandbox / Environment Governance",
+    hook:"I turned a HubSpot sandbox from a spare environment into a controlled QA and change-management layer protecting production.",
+    role:{type:"owned", text:"As primary requestor and HubSpot Super Admin, I created the sandbox, defined the governance model, ran testing personally as QA gatekeeper, and controlled deployment access — end to end."},
+    problem:"The organization needed a safe place to test changes before production — and that need became urgent when HubSpot announced it was sunsetting Legacy Standard Sandboxes, forcing a move to a properly governed replacement.",
+    solution:"I built the sandbox into a governed layer that every meaningful change had to pass through first: anything touching core operations, global data structures, or integrated platforms had to be validated in sandbox before reaching production.",
+    flow:[
+      {type:"node", t:"Proposed change", d:""},
+      {type:"node", t:"Sandbox QA", d:"Mirrors production via Sync Production to Sandbox: schemas, pipeline stages, custom properties, forms, lists, workflows"},
+      {type:"node", t:"Manual testing", d:"Workflows, forms, properties, lists; mock CSV data with backdated timestamps to test inactive-contact logic"},
+      {type:"node", t:"Native dependency check", d:""},
+      {type:"node", t:"Super Admin review", d:"Deploy access restricted from general users, regional admins, external agencies"},
+      {type:"node", t:"Deploy to production", d:""}
+    ],
+    technicalIntro:"Because users and permissions aren't copied automatically when a sandbox is created, I manually invited the users who needed access, then used Sync Production to Sandbox to mirror the real environment. I personally tested workflows, forms, properties, and lists — including mock CSV imports with backdated timestamps to validate inactive-contact and non-marketing logic — manually enrolling test contacts and watching workflow history and branch/status changes play out.",
+    technicalList:[
+      "Ran HubSpot's native dependency tool before any deployment to catch what a change might break elsewhere.",
+      "Deploy-to-production access was restricted to designated Super Admins only.",
+      "Wrote a Sandbox Governance Playbook covering change-management tiers, naming conventions, and environment hygiene.",
+      "The HubSpot sandbox connected to a dedicated Salesforce Developer/Full sandbox — never production — and Amplemarket testing ran through a dedicated profile mapped to the sandbox Hub ID with fake prospect emails."
+    ],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "The sandbox shielded live CRM data from experimentation and reduced ad hoc changes tested directly in production",
+      "Caught critical defects before production, including a workflow loop and a Salesforce country-mapping dropout",
+      "Deployments became more predictable; leadership came to expect sandbox sign-off before significant changes",
+      "Zero production incidents were attributable to changes that went through the sandbox process, during the period observed"
+    ],
+    caveat:"Not extending this into a claim of flawless CRM uptime or zero production incidents overall — only that changes tested through this specific process didn't cause incidents.",
+    takeaway:"This project shows risk- and change-management thinking, not just sandbox configuration: designing the rule for what has to be tested, personally gatekeeping quality, and controlling who can deploy."
+  },
+  {
+    id:"amplemarket", tier:"short", arc:"Integrate",
+    platform:{name:"Amplemarket", color:"#4C3AE3"},
+    crumb:"Sequences > Migrated from Sales Hub",
+    uiMock:{type:"amp-sequence", title:"Inbound Follow-Up Sequence · Step 1",
+      editorText:"[Sample Company]: {PROJECT / NEED DESCRIPTION} — use the prospect's words/phrases\n\n{first_name} — thank you for reaching out and your interest in [Sample Company]!\n\nI saw that you're seeking support for {INSERT PROJECT / NEED DESCRIPTION}. It sounds like a good fit for our team, and I'm confident we can help.\n\nAre you open to a short call this or next week?",
+      previewTo:"sample.prospect@example.com",
+      previewSubject:"[Sample Company]: {PROJECT / NEED DESCRIPTION}",
+      previewBody:"Hi Sample — thank you for reaching out and your interest in [Sample Company]!\n\nI saw that you're seeking support for {INSERT PROJECT / NEED DESCRIPTION}. Are you open to a short call this or next week?\n\nBest,\nSample Rep"
+    },
+    title:"Amplemarket Migration, Sales Engagement & Prospecting Enablement",
+    hook:"I migrated Sales engagement capabilities out of HubSpot Sales Hub while keeping inbound sequences, prospecting workflows, and user adoption moving.",
+    role:{type:"owned", text:"I migrated six existing inbound sequences, personally configured Salesforce field mapping, built the supporting workflows, onboarded eight Sales users, and produced the documentation the team used afterward."},
+    problem:"CloudFactory decommissioned HubSpot Sales Hub and adopted Amplemarket for prospecting and sales engagement. (Book-a-Meeting routing was a separate, related migration.)",
+    solution:"I moved sequencing, LinkedIn outreach, deliverability, AI-assisted messaging, Salesforce integration, and job-change signal tracking into Amplemarket, migrating the six inbound sequences already in production so Sales didn't lose continuity.",
+    flow:[
+      {type:"node", t:"HubSpot Sales Hub", d:"6 inbound sequences"},
+      {type:"branch", items:[
+        {t:"Searcher", d:""},
+        {t:"Sequences", d:""},
+        {t:"Duo Signals", d:"Job-change alerts"},
+        {t:"LinkedIn outreach", d:"+ exclusion / compliance controls"}
+      ]},
+      {type:"node", t:"Salesforce", d:"Account Type / Account Owner field mapping"}
+    ],
+    technicalIntro:"I configured Duo Signals to surface recent job changes among customers and former customers for Marketing's use, and personally mapped Salesforce fields including Account Type and Account Owner. I onboarded eight Sales users and validated the sync using Amplemarket's built-in logs and sample records — no issues surfaced during migration. I also wrote documentation covering setup, integration, field mapping, the Searcher tool, sequences, job-change alerts, competitor handling, and the exclusion list, and stayed on as ongoing admin/support, including unsubscribe and consent controls.",
+    technicalList:[],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "Sales continued running inbound sequences without disruption",
+      "All eight onboarded users adopted the platform",
+      "Duo Signals proved useful to Marketing; compliance/consent governance was strengthened",
+      "Feedback was positive"
+    ],
+    caveat:"Not claiming a specific productivity, revenue, pipeline, or manual-data-upkeep improvement — these weren't measured.",
+    takeaway:"A platform migration where the technical work mattered less than the continuity work — documentation, onboarding, and governance — that kept Sales productive through the change."
+  },
+  {
+    id:"calendly", tier:"short", arc:"Integrate",
+    platform:{name:"Calendly", color:"#0069FF"},
+    crumb:"Routing Forms > Book a Meeting",
+    uiMock:{type:"calendly", title:"Website Book a Meeting routing",
+      routes:[
+        {rule:'If <b>"Work Email"</b> domain is personal/free, or the visitor\'s region is not eligible, then go to:', dest:"Thank you for your interest", meta:"Sorry — please reach out through our contact form instead.", avatars:[]},
+        {rule:'If the visitor already has a <b>Contact Owner</b> on file, then go to:', dest:"Discovery Call", meta:"Admin managed · 30 mins · One-on-One", avatars:["A"]},
+        {rule:'If <b>Region</b> is EMEA, then go to:', dest:"Shared — Discovery Call · EMEA", meta:"30 mins · Round Robin", avatars:["B","C"]},
+        {rule:"In all other cases, route to:", dest:"Shared — Discovery Call · Americas", meta:"30 mins · Round Robin", avatars:["D","E","F"]}
+      ]
+    },
+    title:"Sales Hub → Calendly Book-a-Meeting Migration & Routing",
+    hook:"When a core website booking flow broke during a GTM platform change, I replaced the capability without rebuilding the entire sales stack.",
+    role:{type:"owned", text:"I evaluated replacement options, made the recommendation, and built and tested the new routing myself."},
+    problem:"Sales Hub was being decommissioned — it delivered low value and prospecting had moved to Amplemarket — but it had also quietly been powering the website's \"Book a Meeting\" booking and round-robin logic. That flow broke during the migration.",
+    solution:"I evaluated Calendly against Chili Piper and chose Calendly — simpler to set up, cheaper, better fit for a narrow use case — then rebuilt routing to preserve existing account ownership rather than treating every booking as brand new.",
+    flow:[
+      {type:"node", t:"Website \"Book a Meeting\"", d:""},
+      {type:"node", t:"Qualification gate", d:"Free-email / ineligible-country traffic redirected to Contact Us → lead scoring"},
+      {type:"branch", items:[
+        {t:"Existing CRM owner", d:"Route to existing owner"},
+        {t:"No existing owner", d:"US/EMEA round robin → AE calendar availability"}
+      ]},
+      {type:"node", t:"Slack notification", d:""}
+    ],
+    technicalIntro:"I configured Routing Forms, Event Types, regional (US/EMEA) routing, owner-preservation logic, and the HubSpot/Salesforce integration and Slack workflow. I tested using contacts routed to myself to avoid generating noise for AEs — that testing surfaced free-email and ineligible-country traffic, which I redirected into the Contact Us → lead-scoring flow instead of straight to an AE.",
+    technicalList:[],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "Booking capability was restored",
+      "Meetings booked this way effectively became handraisers that bypassed standard scoring",
+      "Existing account ownership was preserved",
+      "Irrelevant meetings reaching Sales dropped by roughly 80% after the qualification gate went in"
+    ],
+    caveat:"Not claiming a specific speed-to-lead, booking-volume, manual-assignment-reduction, or revenue/pipeline improvement — these weren't measured.",
+    takeaway:"A forced deadline is still a decision point: evaluating build-vs-buy against cost and actual use case, then protecting existing business logic instead of starting from a blank slate."
+  },
+  {
+    id:"contact-us", tier:"short", arc:"Integrate",
+    platform:{name:"HubSpot", color:"#E85C33"},
+    crumb:"Workflows > Contact Us Goal Routing",
+    uiMock:{type:"hubspot", title:"Contact Us | Client-Goal Routing | Workflow",
+      branchLabel:"2. Branch",
+      branchDesc:"Branch based on <b>Inquiry Type</b>",
+      outcomes:[
+        {t:"Service", d:"Existing scoring → MQL threshold → AE routing"},
+        {t:"Partnership", d:"Workflow → VP Sales (bypasses scoring)"},
+        {t:"Careers", d:"Workflow → Talent (bypasses scoring)"}
+      ]
+    },
+    title:"Contact Us Client-Goal Routing",
+    hook:"I translated three different business intents into three different automated ownership paths.",
+    role:{type:"owned", text:"I designed and built the routing logic and workflows, and tested all three paths myself before adding myself to the Slack notifications to monitor them."},
+    problem:"Every Contact Us submission was handled the same way — entered as New and assigned to an inactive placeholder user — regardless of whether the person wanted a service conversation, a partnership discussion, or was applying for a job.",
+    solution:"I split submissions by stated goal — Service, Partnership, or Careers — and routed each down its own automated path, while preserving any existing AE ownership already on the record.",
+    flow:[
+      {type:"node", t:"Contact Us submission", d:""},
+      {type:"branch", items:[
+        {t:"Service", d:"Existing scoring → MQL threshold → AE routing"},
+        {t:"Partnership", d:"Workflow → VP Sales (bypasses scoring)"},
+        {t:"Careers", d:"Workflow → Talent (bypasses scoring)"}
+      ]}
+    ],
+    technicalIntro:"Built using HubSpot workflows, the existing lead-scoring model (applied only to Service inquiries), and Slack notifications. I modified the workflows and routing logic behind the form — not the form itself, which wasn't part of this project.",
+    technicalList:[],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "All three paths worked correctly in production, with no manual intervention or misrouting observed",
+      "No issues reported by stakeholders",
+      "AEs stopped receiving non-sales inquiries; Careers/Talent submissions stopped getting lost in the CRM"
+    ],
+    caveat:"",
+    takeaway:"A form is only as good as the intents it recognizes — modeling three distinct paths instead of one generic intake had an outsized effect on who had to deal with the noise afterward."
+  },
+  {
+    id:"kenya-postel", tier:"short", arc:"Build",
+    platform:{name:"Salesforce", color:"#0D9DDB"},
+    crumb:"Setup > Objects > Five-Country Rollout",
+    title:"Kenya Postel Directories Salesforce CRM Implementation",
+    hook:"I helped move a five-country commercial operation from manual, document-based tracking into a centralized Salesforce CRM.",
+    role:{type:"partner", text:"As Systems Support Manager, I worked alongside Salesforce consultants from requirements through configuration, migration, testing, rollout, training, and adoption — a partnered implementation, not solo architecture."},
+    problem:"Across Kenya, Tanzania, Mozambique, Cape Verde, and São Tomé — roughly 50 users in total — the business ran on manual tracking, fragmented data, slow reporting, and heavy dependence on weekly manually-compiled reports.",
+    solution:"We centralized Leads, Accounts, Contacts, Opportunities, Contracts, and Activities into one Salesforce instance, with largely similar processes across countries layered with country-specific detail, migrating historical records by mass import.",
+    flow:[
+      {type:"node", t:"5 countries", d:"Manual, document-based tracking"},
+      {type:"node", t:"Requirements → configuration → migration → testing → rollout → training → adoption", d:""},
+      {type:"node", t:"Centralized Salesforce", d:"Leads → Accounts/Contacts → Opportunities → Contracts → Activities"},
+      {type:"node", t:"Management reporting + field capture via tablets", d:"Customer info, opportunities, contracts, e-signature"}
+    ],
+    technicalIntro:"Field teams used tablets to capture customer information, create opportunities and contracts, and get contracts signed directly with clients. I helped train roughly 50 users through a mix of virtual and in-person sessions — including travel to Mozambique and Tanzania — followed by monthly refresher support for six months after rollout.",
+    technicalList:[],
+    technicalProcess:"",
+    technicalNote:"",
+    resultList:[
+      "A centralized CRM with real-time visibility and cross-country comparison",
+      "Reduced dependence on weekly manual reports",
+      "Improved tracking and field data capture via tablets"
+    ],
+    caveat:"Not claiming advanced Salesforce architecture or features beyond what's explicitly documented here.",
+    takeaway:"This is where the systems-thinking habit started, years before CloudFactory — helping turn a manual, fragmented, multi-country process into one structured system, including the training work needed to get people to actually use it."
+  }
+];
+
+const FEATURED = ["lead-scoring","contact-governance","pipeline-health"];
+
+const TIMELINE = [
+  {when:"Nov 2011 – Dec 2021", what:"Systems Support Manager", where:"Kenya Postel Directories — five-country Salesforce rollout"},
+  {when:"Jan 2022", what:"Junior Salesforce Analyst", where:"CloudFactory"},
+  {when:"Jun 2023", what:"Salesforce Analyst", where:"CloudFactory"},
+  {when:"Apr 2025", what:"Took over HubSpot & Demandbase", where:"CloudFactory"},
+  {when:"Mar 2026", what:"RevOps Specialist", where:"CloudFactory — current role", current:true}
+];
+
+const SKILL_GROUPS = [
+  {label:"CRM", items:["Salesforce"]},
+  {label:"Marketing Automation & Lifecycle", items:["HubSpot Marketing Hub Enterprise"]},
+  {label:"Intent & Enrichment", items:["Demandbase","ZoomInfo / Web Insights"]},
+  {label:"Sales Engagement & Prospecting", items:["Amplemarket","LinkedIn Sales Navigator","Chorus"]},
+  {label:"Analytics & BI", items:["Tableau","Looker Studio","Power BI"]}
+];
+
+const CAPABILITIES = ["GTM Systems Architecture","Revenue Operations","CRM Operations","Automation & Workflow Logic","Reporting & Analytics","Data Quality & Governance","Process Optimization","Routing & Lifecycle Management","Technology Evaluation","Cross-Functional Operations"];
+
+const CERTS = [
+  {t:"Salesforce Certified Administrator (SCA)", s:"Salesforce", d:"Issued Sep 2021"},
+  {t:"Salesforce Certified Platform App Builder", s:"Salesforce", d:"Issued Jul 2025"},
+  {t:"HubSpot Marketing Software", s:"HubSpot Academy", d:"Issued May 2025 · Expires Jun 2026"},
+  {t:"HubSpot Reporting", s:"HubSpot Academy", d:"Issued Jun 2025 · Expires Jul 2026"},
+  {t:"CCNA I & II", s:"Cisco Networking Academy"}
+];
+
+const EDUCATION = [
+  {school:"Jomo Kenyatta University of Agriculture and Technology (JKUAT)", program:"Master of Business Administration (MBA), Strategic Management"},
+  {school:"Africa Nazarene University", program:"Bachelor of Business and Information Technology (BBIT), Networking"}
+];
+
+/* ============ RENDER HELPERS ============ */
+
+function el(html){
+  const d = document.createElement('div');
+  d.innerHTML = html.trim();
+  return d.firstElementChild;
+}
+
+function flowHTML(steps){
+  return `<div class="flow">${steps.map(s=>{
+    if(s.type==="node"){
+      return `<div class="flow-step"><div class="flow-node"><div class="t">${s.t}</div>${s.d?`<div class="d">${s.d}</div>`:""}</div></div>`;
+    } else {
+      return `<div class="flow-step"><div class="flow-branches">${s.items.map(b=>`<div class="flow-branch"><div class="t">${b.t}</div>${b.d?`<div class="d">${b.d}</div>`:""}</div>`).join("")}</div></div>`;
+    }
+  }).join("")}</div>`;
+}
+
+function dashTilesHTML(tiles){
+  return `<div class="dash-tiles">${tiles.map(t=>`
+    <div class="dash-tile">
+      <div class="k">${t.k}</div>
+      <div class="v">${t.v}</div>
+      <div class="bar"><i style="width:${t.pct}%"></i></div>
+    </div>`).join("")}</div>`;
+}
+
+function hsCanvasHTML(cfg){
+  return `<div class="hs-canvas">
+    <div class="hs-topbar">
+      <div class="title">${cfg.title}</div>
+      <div class="sub">Sanitized example · not the real account</div>
+    </div>
+    <div class="hs-canvas-body">
+      <div class="hs-node"><div class="icon-row"><span class="icon">⑂</span><span class="label">${cfg.branchLabel}</span></div><div class="desc">${cfg.branchDesc}</div></div>
+      <div class="hs-connector"></div>
+      <div class="hs-branches">
+        ${cfg.outcomes.map(o=>`<div class="hs-branch-col">
+          <div class="hs-outcome">${o.t}</div>
+          <div class="hs-connector"></div>
+          <div class="hs-outcome-detail">${o.d}</div>
+        </div>`).join(`<div style="width:1px;"></div>`)}
+      </div>
+    </div>
+  </div>`;
+}
+
+function calRoutesHTML(cfg){
+  const colors = ["#C1571B","#1C6FB0","#2F7A52"];
+  return `<div class="cal-mock">
+    <span class="crumb-link">&larr; Back to routing forms</span>
+    <h4>${cfg.title}</h4>
+    <div class="edited">Sanitized example — not the real account</div>
+    <div class="cal-tabs"><span class="active">Logic</span><span>Form</span><span>Responses</span></div>
+    <div class="cal-routes-head"><b style="font-size:0.9rem;">Routes</b></div>
+    ${cfg.routes.map((r,i)=>`<div class="cal-route">
+      <span class="n">${i+1}</span>
+      <div class="body">
+        <div class="rule">${r.rule}</div>
+        <div class="cal-dest">
+          <div><div class="dt">${r.dest}</div><div class="dm">${r.meta}</div></div>
+          <div class="cal-avatars">${(r.avatars||[]).map((a,j)=>`<span style="background:${colors[j%colors.length]}">${a}</span>`).join("")}</div>
+        </div>
+      </div>
+    </div>`).join("")}
+  </div>`;
+}
+
+function sfDashboardHTML(cfg){
+  return `<div class="sf-dash">
+    <div class="sf-head">
+      <div class="t">${cfg.title}</div>
+      <div class="s">${cfg.subtitle}</div>
+      <div class="meta">Illustrative data · sanitized example</div>
+    </div>
+    ${cfg.sections.map(sec=>`
+      <div class="sf-band">${sec.band}</div>
+      ${sec.tiles?`<div class="sf-tiles">${sec.tiles.map(t=>`<div class="sf-tile"><div class="k">${t.k}</div><div class="v">${t.v}</div></div>`).join("")}</div>`:""}
+      ${sec.charts?`<div class="sf-charts">${sec.charts.map(c=>`<div class="sf-chart"><div class="k">${c.k}</div><div class="sf-bars">${c.bars.map(h=>`<i style="height:${h}%"></i>`).join("")}</div></div>`).join("")}</div>`:""}
+      ${sec.table?`<div style="padding:4px 4px 10px;overflow-x:auto;"><table class="sf-mini-table"><thead><tr>${sec.table.head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${sec.table.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:""}
+    `).join("")}
+  </div>`;
+}
+
+function hsEnvHTML(cfg){
+  return `<div class="hs-canvas">
+    <div class="hs-topbar">
+      <div class="title">${cfg.title}</div>
+      <div class="sub">Sanitized example · not the real account</div>
+    </div>
+    <div class="hs-env-body">
+      <div class="hs-env-row">
+        ${cfg.stages.map((s,i)=>{
+          const card = s.kind==='gate'?`<div class="hs-env-gate">${s.label}</div>`:`<div class="hs-env-card"><div class="t">${s.label}</div>${s.d?`<div class="d">${s.d}</div>`:""}</div>`;
+          return i>0 ? `<div style="display:flex;align-items:center;"><span class="hs-env-arrow">&rarr;</span>${card}</div>` : card;
+        }).join("")}
+      </div>
+    </div>
+  </div>`;
+}
+
+function ampSequenceHTML(cfg){
+  return `<div class="amp-mock">
+    <div class="amp-top">
+      <span class="t">${cfg.title}</span>
+      <span class="badge">Sanitized example</span>
+    </div>
+    <div class="amp-cols">
+      <div class="amp-col editor">
+        <div class="amp-toggles">
+          <span class="amp-toggle"><span class="dot"></span>Generate with AI</span>
+          <span class="amp-toggle"><span class="dot"></span>Automatic</span>
+          <span class="amp-toggle"><span class="dot"></span>Enabled</span>
+        </div>
+        <div class="amp-body-text">${cfg.editorText}</div>
+      </div>
+      <div class="amp-col preview">
+        <div class="amp-preview-meta">To: ${cfg.previewTo}<br>Subject: ${cfg.previewSubject}</div>
+        <div class="amp-preview-body">${cfg.previewBody}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toolFrameHTML(p, innerHtml){
+  const platform = p.platform || {name:"System", color:"#6B7480"};
+  return `<div class="tool-frame">
+    <div class="tool-bar">
+      <div class="tool-dots"><span></span><span></span><span></span></div>
+      <span class="tool-name" style="background:${platform.color}">${platform.name}</span>
+      <span class="tool-crumb">${p.crumb || ""}</span>
+      <span class="tool-sanitized">Sanitized example</span>
+    </div>
+    <div class="tool-body">${innerHtml}</div>
+  </div>`;
+}
+
+function howItWorkedHTML(p){
+  if(p.uiMock){
+    const m = p.uiMock;
+    if(m.type==="hubspot") return hsCanvasHTML(m);
+    if(m.type==="calendly") return calRoutesHTML(m);
+    if(m.type==="salesforce") return sfDashboardHTML(m);
+    if(m.type==="hs-env") return hsEnvHTML(m);
+    if(m.type==="amp-sequence") return ampSequenceHTML(m);
+    if(m.type==="salesforce-multi"){
+      return m.dashboards.map(d=>`<div class="sf-multi-label">${d.label}</div>${sfDashboardHTML(d)}`).join("");
+    }
+  }
+  return toolFrameHTML(p, (p.dashTiles?dashTilesHTML(p.dashTiles):"") + flowHTML(p.flow));
+}
+
+function projectCard(p){
+  return `<a class="card" href="#work/${p.id}">
+    <div class="row1">
+      <span class="eyebrow"><span class="dot"></span>${p.arc}</span>
+      <span class="pill ${p.tier==='deep'?'deep':''}">${p.tier==='deep'?'Deep dive':'Short'}</span>
+    </div>
+    <h3>${p.title}</h3>
+    <div class="hook">${p.hook}</div>
+  </a>`;
+}
+
+/* ============ VIEWS ============ */
+
+function viewHome(){
+  const featured = FEATURED.map(id=>PROJECTS.find(p=>p.id===id));
+  return `
+  <div class="wrap view">
+    <section class="hero">
+      <svg class="node-mark" width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+        <circle cx="7" cy="27" r="3.4" fill="var(--accent)"/>
+        <circle cx="27" cy="7" r="3.4" fill="var(--ink)"/>
+        <circle cx="27" cy="27" r="3.4" fill="var(--ink)"/>
+        <path d="M10 25 L24 9 M10.5 27 L23.5 27" stroke="var(--line-strong)" stroke-width="1.6"/>
+      </svg>
+      <h1>Juliet Nyakoe</h1>
+      <div class="role">RevOps &amp; GTM Systems Specialist</div>
+      <p class="lede">I diagnose messy commercial and operational problems, translate business requirements into system logic, and use data to tell you whether it worked.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#work">See the work</a>
+        <a class="btn" href="#contact">Get in touch</a>
+      </div>
+      <div class="proof">
+        <div class="cell"><div class="num"><b>~10 → ~18</b>/wk</div><div class="cap">Qualified MQLs to Sales, after a lead-scoring rebuild</div></div>
+        <div class="cell"><div class="num"><b>~74k → ~60k</b></div><div class="cap">Marketing contacts — headroom created under an 80k cap</div></div>
+        <div class="cell"><div class="num"><b>~80%</b> fewer</div><div class="cap">Irrelevant meetings reaching Sales, after a routing fix</div></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head"><h2>What I do</h2></div>
+      <div class="do-list">
+        <div class="item"><span class="tag">Fix</span><div>I fix broken or noisy GTM processes — lead scoring, routing, database governance — and rebuild them on evidence, not guesswork.</div></div>
+        <div class="item"><span class="tag">Connect</span><div>I work across Salesforce, HubSpot, Demandbase, and Amplemarket, and connect them to reporting in Tableau, Looker Studio, and Power BI.</div></div>
+        <div class="item"><span class="tag">Decide</span><div>I don't just administer these systems — I decide what's worth keeping, what needs fixing, and what should be decommissioned.</div></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head"><h2>Selected work</h2><a class="btn" href="#work">All 9 projects →</a></div>
+      <div class="featured-strip">${featured.map(projectCard).join("")}</div>
+    </section>
+  </div>`;
+}
+
+function viewWork(){
+  const order = ["kenya-postel","lead-scoring","contact-governance","calendly","amplemarket","contact-us","pipeline-health","demandbase","sandbox"];
+  const ordered = order.map(id=>PROJECTS.find(p=>p.id===id));
+  return `
+  <div class="wrap view">
+    <span class="eyebrow"><span class="dot"></span>Selected work</span>
+    <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">Nine projects, one progression</h1>
+    <p class="lede" style="margin-top:14px;">Ordered the way the work actually built on itself — from a first hands-on CRM build through governance, integration, analysis, and decisions about what to keep.</p>
+    <div class="work-grid" style="margin-top:36px;">${ordered.map(projectCard).join("")}</div>
+  </div>`;
+}
+
+function viewCaseStudy(id){
+  const p = PROJECTS.find(x=>x.id===id);
+  if(!p) return `<div class="wrap view"><p>Project not found.</p><button class="btn" onclick="go('work')">Back to work</button></div>`;
+  return `
+  <div class="wrap view">
+    <button class="back" onclick="go('work')">&larr; All work</button>
+    <div class="cs-head">
+      <span class="eyebrow"><span class="dot"></span>${p.arc} · ${p.tier==='deep'?'Deep dive':'Case study'}</span>
+      <h1 style="margin-top:12px;">${p.title}</h1>
+      <p class="hook">${p.hook}</p>
+    </div>
+
+    <div class="cs-section">
+      <span class="num">01 — The problem</span>
+      <p>${p.problem}</p>
+    </div>
+
+    <div class="cs-section">
+      <span class="num">02 — My role</span>
+      <span class="role-badge ${p.role.type==='partner'?'partner':''}">${p.role.type==='partner'?'Owned + partnered':'I owned this'}</span>
+      <p>${p.role.text}</p>
+    </div>
+
+    <div class="cs-section">
+      <span class="num">03 — The solution</span>
+      <p>${p.solution}</p>
+    </div>
+
+    <div class="cs-section">
+      <span class="num">04 — How it worked</span>
+      ${howItWorkedHTML(p)}
+    </div>
+
+    <div class="cs-section">
+      <span class="num">05 — Technical detail</span>
+      ${p.technicalIntro?`<p>${p.technicalIntro}</p>`:""}
+      ${p.technicalTable?tableHTML(p.technicalTable):""}
+      ${p.technicalList && p.technicalList.length?`<ul>${p.technicalList.map(li=>`<li>${li}</li>`).join("")}</ul>`:""}
+      ${p.technicalProcess?`<p>${p.technicalProcess}</p>`:""}
+      ${p.technicalNote?`<div class="caveat">${p.technicalNote}</div>`:""}
+      ${p.illustrativeNote?`<div class="note-tag">${p.illustrativeNote}</div>`:""}
+    </div>
+
+    <div class="cs-section">
+      <span class="num">06 — Result</span>
+      <ul>${p.resultList.map(li=>`<li>${li}</li>`).join("")}</ul>
+      ${p.caveat?`<div class="caveat">${p.caveat}</div>`:""}
+    </div>
+
+    <div class="cs-section">
+      <span class="num">07 — Takeaway</span>
+      <p>${p.takeaway}</p>
+    </div>
+
+    <div class="cs-section">
+      <button class="btn" onclick="go('work')">&larr; Back to all work</button>
+    </div>
+  </div>`;
+}
+
+function tableHTML(rows){
+  const [head, ...body] = rows;
+  return `<div style="overflow-x:auto;margin:14px 0;">
+    <table style="border-collapse:collapse;width:100%;min-width:420px;font-size:0.9rem;">
+      <thead><tr>${head.map(h=>`<th style="text-align:left;padding:8px 12px;border-bottom:1px solid var(--line-strong);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;text-transform:uppercase;color:var(--ink-soft);">${h}</th>`).join("")}</tr></thead>
+      <tbody>${body.map(r=>`<tr>${r.map(c=>`<td style="padding:10px 12px;border-bottom:1px solid var(--line);">${c}</td>`).join("")}</tr>`).join("")}</tbody>
+    </table>
+  </div>`;
+}
+
+function viewAbout(){
+  return `
+  <div class="wrap view">
+    <span class="eyebrow"><span class="dot"></span>About</span>
+    <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">Systems, then strategy</h1>
+    <p class="lede" style="margin-top:16px;">I'm a commercial data and operations professional with 5+ years working inside GTM and RevOps environments — most recently as a RevOps Specialist at CloudFactory, after progressing from Salesforce administration into HubSpot, Demandbase, and cross-platform reporting.</p>
+    <p style="max-width:64ch;margin-top:16px;color:var(--ink-soft);">I translate messy, multi-source data into insights that hold up, and turn business requirements into the system logic — scoring, routing, governance, dashboards — that makes them usable day to day. The tools I use aren't the point: what I actually do is audit a broken or noisy process, decide what's worth fixing versus decommissioning, build the fix, validate it against real data, and report on whether it worked.</p>
+
+    <section class="block">
+      <div class="section-head"><h2>Progression</h2></div>
+      <div class="timeline">
+        ${TIMELINE.map(t=>`<div class="t-item ${t.current?'current':''}">
+          <div class="when">${t.when}</div>
+          <div class="what">${t.what}</div>
+          <div class="where">${t.where}</div>
+        </div>`).join("")}
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head"><h2>Education</h2></div>
+      <div class="cert-grid">
+        ${EDUCATION.map(e=>`<div class="cert-card"><div class="t">${e.program}</div><div class="s">${e.school}</div></div>`).join("")}
+      </div>
+    </section>
+  </div>`;
+}
+
+function viewSkills(){
+  return `
+  <div class="wrap view">
+    <span class="eyebrow"><span class="dot"></span>Skills &amp; systems</span>
+    <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">What I actually work in</h1>
+    <p class="lede" style="margin-top:14px;">Systems are evidence of capability, not the identity of the work. Grouped by what each one is for:</p>
+
+    <div class="skill-groups" style="margin-top:32px;">
+      ${SKILL_GROUPS.map(g=>`<div class="skill-group">
+        <div class="label">${g.label}</div>
+        <div class="chip-row">${g.items.map(i=>`<span class="chip">${i}</span>`).join("")}</div>
+      </div>`).join("")}
+    </div>
+
+    <section class="block">
+      <div class="section-head"><h2>Core capability</h2></div>
+      <div class="cap-pills">${CAPABILITIES.map(c=>`<span class="cap-pill">${c}</span>`).join("")}</div>
+    </section>
+  </div>`;
+}
+
+function viewCertifications(){
+  return `
+  <div class="wrap view">
+    <span class="eyebrow"><span class="dot"></span>Certifications</span>
+    <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">Certifications</h1>
+    <div class="cert-grid" style="margin-top:32px;">
+      ${CERTS.map(c=>`<div class="cert-card"><div class="t">${c.t}</div><div class="s">${c.s}${c.d?` · ${c.d}`:""}</div></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function viewContact(){
+  return `
+  <div class="wrap view">
+    <span class="eyebrow"><span class="dot"></span>Contact</span>
+    <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">Get in touch</h1>
+    <div class="contact-box">
+      <p>Happy to walk through any of these projects in more depth, or talk about a role.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="mailto:bonanyke@gmail.com" target="_top" onclick="copyText('bonanyke@gmail.com','email')">Email me</a>
+        <a class="btn" href="tel:+254723902312" target="_top" onclick="copyText('+254723902312','phone')">+254 723 902 312</a>
+        <a class="btn" href="https://www.linkedin.com/in/juliet-nyakoe-443bab47/" target="_top" rel="noopener">LinkedIn</a>
+      </div>
+      <div class="copy-hint" id="copy-hint"></div>
+      <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line);">
+        <a class="btn" href="cv/Juliet-Nyakoe-CV.pdf" target="_top" rel="noopener">Download CV (PDF)</a>
+        <p class="muted" style="margin-top:10px;font-size:0.8rem;">Opens in a new tab — use your browser's save/print option to keep a copy.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============ ROUTER ============ */
+
+function parseHash(){
+  const h = (location.hash || "#home").slice(1);
+  const parts = h.split("/").filter(Boolean);
+  return {route: parts[0] || "home", sub: parts[1] || null};
+}
+
+function render(){
+  const {route, sub} = parseHash();
+  const root = document.getElementById('view-root');
+  let html = "";
+  let topRoute = route;
+  if(route==="home") html = viewHome();
+  else if(route==="work" && !sub) html = viewWork();
+  else if(route==="work" && sub){ html = viewCaseStudy(sub); topRoute="work"; }
+  else if(route==="about") html = viewAbout();
+  else if(route==="skills") html = viewSkills();
+  else if(route==="certifications") html = viewCertifications();
+  else if(route==="contact") html = viewContact();
+  else html = viewHome();
+
+  root.innerHTML = html;
+  window.scrollTo({top:0, behavior:"instant"});
+
+  document.querySelectorAll('#tabs button').forEach(btn=>{
+    if(btn.dataset.route === topRoute) btn.setAttribute('aria-current','page');
+    else btn.removeAttribute('aria-current');
+  });
+}
+
+function go(route){ location.hash = "#" + route; }
+
+function copyText(text, kind){
+  try{
+    navigator.clipboard.writeText(text).then(()=>{
+      const hint = document.getElementById('copy-hint');
+      if(hint) hint.textContent = (kind==='email' ? 'Email' : 'Phone number') + ' copied to clipboard — ' + text;
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+document.getElementById('tabs').addEventListener('click', e=>{
+  const btn = e.target.closest('button[data-route]');
+  if(btn) go(btn.dataset.route);
+});
+
+window.addEventListener('hashchange', render);
+render();
+</script>
