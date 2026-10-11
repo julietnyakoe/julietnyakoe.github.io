@@ -493,6 +493,20 @@
     .header-inner{height:auto;flex-direction:column;align-items:stretch;padding-block:10px;gap:8px;}
     nav.tabs{justify-content:flex-start;}
   }
+  .stage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:16px 0 4px;}
+  .stage-card{border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;padding:16px 18px;}
+  .stage-card.s2{border-color:var(--accent);}
+  .stage-tag{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-ink);}
+  .stage-card h3{margin:8px 0 6px;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;text-wrap:balance;}
+  .stage-card p{margin:0;font-size:0.92rem;color:var(--ink-soft);}
+  .ops-chain{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px 28px;margin:20px 0 10px;}
+  .ops-step{position:relative;display:flex;}
+  .ops-step:not(:last-child)::after{content:"\2192";position:absolute;right:-22px;top:50%;transform:translateY(-50%);color:var(--ink-soft);}
+  .ops-card{flex:1;border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;padding:10px 12px;font-size:0.85rem;font-weight:500;}
+  .ops-card small{display:block;font-weight:400;color:var(--ink-soft);font-size:0.75rem;margin-top:3px;}
+  .resp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:4px 28px;margin-top:18px;}
+  .resp-item{padding:12px 0;border-top:1px solid var(--line);font-size:0.9rem;color:var(--ink-soft);}
+  .resp-item b{display:block;color:var(--ink);font-size:0.92rem;margin-bottom:2px;}
 </style>
 
 <div class="site-header">
@@ -537,38 +551,48 @@ const PROJECTS = [
         {t:"Nurture Path", d:"Lead Stage: New · Marketing nurture"}
       ]
     },
-    title:"HubSpot Lead Scoring Migration & Optimization",
-    hook:"I rebuilt a weak lead-scoring model so Sales received fewer irrelevant MQLs while stronger buying signals were prioritized.",
-    role:{type:"owned", text:"I audited the existing scoring model, proposed the replacement logic, and carried it through build, testing, and activation. VP Marketing and VP Sales reviewed my proposal and gave feedback before I built it."},
-    problem:"HubSpot required a migration to a new scoring model ahead of a fixed deadline. The existing model was missing good leads while still surfacing poor-quality ones — Sales was getting noise, and Marketing had no reliable way to tell a real buying signal from a weak one.",
-    solution:"I redesigned the scoring model around three input types — demographic, firmographic, and behavioral — combined into a single weighted score, with a clear qualification threshold that decided what happened to a lead next.",
-    flow:[
-      {type:"node", t:"Demographic + firmographic + behavioral inputs", d:"Combined into a single weighted score"},
-      {type:"branch", items:[
-        {t:"Above threshold", d:"MQL · Lead Stage: Open · Regional AE routing · Slack + email notification"},
-        {t:"Below threshold", d:"Lead · Lead Stage: New · Marketing nurture"}
+    title:"HubSpot Lead Scoring: Migration, then Qualification Redesign",
+    hook:"I moved a legacy scoring model into HubSpot's newer environment without breaking continuity — then worked with Sales and Marketing to fix how leads were qualified.",
+    role:{type:"owned", text:"I inherited a lightly documented lead-management and scoring environment. I carried out the migration into HubSpot's newer scoring environment and, as a separate workstream, audited the qualification logic and proposed improvements. VP Marketing and VP Sales reviewed that proposal and gave feedback before I built, tested, and activated it."},
+    problem:"I inherited a legacy lead-management and scoring environment with limited documentation and no consistent strategic owner. HubSpot was moving to a newer scoring environment on a fixed timeline, so the existing model had to move across without interrupting lead qualification. Separately, the inherited qualification logic wasn't distinguishing stronger prospects from poor-quality leads: good leads were being missed while weak ones still reached Sales.",
+    solution:"I treated this as two related but separate workstreams — a migration and a redesign — so the continuity work and the improvement work could each be judged on its own terms. The migration is not the redesign, and the later qualification improvements are not credited to the migration.",
+    stages:[
+      {tag:"Stage 1 — Migration", t:"Transition the existing model", d:"Moved the existing scoring logic into HubSpot's newer scoring environment, preserving the established qualification rules so lead qualification and downstream lead management kept running. A continuity exercise: the underlying logic was not reworked."},
+      {tag:"Stage 2 — Qualification improvement", t:"Improve how leads are qualified", d:"Worked with Sales and Marketing stakeholders to improve the inherited framework — fit and engagement signals, negative scoring for disqualifying traits, and a clearer link from qualification to lead stage, regional routing, and notifications.", accent:true}
+    ],
+    stageFlow:[
+      {label:"Stage 1 — Migration", steps:[
+        {type:"node", t:"Legacy scoring model", d:"Existing logic, limited documentation"},
+        {type:"node", t:"Migrate into HubSpot's newer scoring environment", d:"Established qualification rules preserved"},
+        {type:"node", t:"Continuity", d:"Lead qualification and downstream lead management keep running"}
+      ]},
+      {label:"Stage 2 — Qualification improvement", steps:[
+        {type:"node", t:"Audit the inherited qualification logic", d:"Where good leads were missed and weak ones got through"},
+        {type:"node", t:"Proposal reviewed by Sales and Marketing leadership", d:"VP Marketing and VP Sales feedback before the build"},
+        {type:"node", t:"Fit + engagement signals, with negative scoring", d:"Combined into a single score"}
       ]}
     ],
-    technicalIntro:"I built the score as a set of weighted tiers rather than a flat checklist, so the strongest buying signals would clearly outrank weak ones instead of a lead scraping by on volume:",
+    technicalIntro:"HubSpot's own scoring documentation distinguishes three approaches: engagement scoring (recorded activity and interactions), fit scoring (demographic and firmographic property values), and combined scoring (both together). The redesign drew on all three concepts, but what I implemented was a single combined score — fit and engagement signals in one model, with negative scoring and one qualification threshold. I'm not claiming separate fit-only or engagement-only production scores. The model was built as weighted tiers rather than a flat checklist, so the strongest signals clearly outrank weak ones:",
     technicalList:[
       "Highest weight — exact matches to the five target verticals, and titles signaling product, data, engineering, research, AI/ML, or computer-vision roles.",
       "High weight — the highest-intent behavioral actions: live webinar attendance, live chat, submitting Contact Us, appearing on the MQL event list or a LinkedIn Lead Ads list, an inbound call, or core marketing-target-list membership.",
       "Moderate-high weight — executive/senior titles, and high-value content list membership.",
       "Moderate weight — director/manager titles, geographies with strong likelihood of doing business, webinar registration, and multiple content downloads.",
       "Lower weight — lighter engagement: blog/newsletter activity, a single download, marketing-email engagement, high-value page visits.",
-      "Disqualifying, regardless of positive score — quarantined emails, competitor/job-seeker indicators, ineligible geographies, opt-outs, disqualification categories, free/personal domains, internal-domain matches, and known competitor domains."
+      "Disqualifying, regardless of positive score — quarantined emails, competitor/job-seeker indicators, ineligible geographies, opt-outs, disqualification categories, free/personal domains, internal-domain matches, and known competitor domains.",
+      "Qualification and routing — above the threshold: MQL status, Lead Stage Open, regional Account Executive routing, and Slack plus email notification. Below it: Lead status, Lead Stage New, and marketing nurture."
     ],
-    technicalProcess:"Process: audit → proposal → VP Marketing/VP Sales review → build and migrate → test against existing contacts with HubSpot's native scoring test → activate → monitor.",
+    technicalProcess:"Stage 2 process: audit → proposal → VP Marketing/VP Sales review → build → test against existing contacts with HubSpot's native scoring test → activate → monitor.",
     technicalNote:"The exact weightings are omitted by design — this is a professional portfolio, not an internal playbook. The tiering shows the reasoning without exposing the underlying formula.",
     resultList:[
-      "Migration completed before the deadline; the old model was fully retired",
-      "MQL volume rose from roughly 10/week to roughly 18/week — about an 80% increase",
-      "Sales reported better-quality MQLs; irrelevant leads reaching Sales dropped significantly",
-      "Missed or incorrectly scored leads decreased; Marketing/Sales alignment improved",
-      "Historical contacts and leads were not retroactively rescored"
+      "<b>Stage 1 — Migration:</b> completed before the deadline, with the existing qualification rules carried across to maintain continuity",
+      "<b>Stage 2 — Qualification:</b> weekly MQL volume rose from roughly 10 to roughly 18 — about an 80% increase",
+      "<b>Stage 2:</b> Sales reported better-quality MQLs, and irrelevant leads reaching Sales dropped significantly",
+      "<b>Stage 2:</b> missed or incorrectly scored leads decreased, and Marketing/Sales alignment improved",
+      "<b>Across both:</b> the old scoring was eliminated, and historical contacts and leads were not retroactively rescored"
     ],
-    caveat:"Not claiming: a revenue or pipeline increase, an exact percentage reduction in irrelevant leads, or a data-accuracy percentage — these weren't measured.",
-    takeaway:"This project shows the pattern behind most of my work: audit first, propose a change with stakeholder sign-off before building it, implement with clear logic rather than a black box, test before activating, and be precise about what the data can and can't tell you afterward."
+    caveat:"The MQL and lead-quality improvements belong to the qualification redesign (Stage 2), not to the migration on its own. Not claiming: a revenue or pipeline increase, a conversion improvement, an exact percentage reduction in irrelevant leads, or a data-accuracy percentage — these weren't measured.",
+    takeaway:"The pattern behind this project: work inside the existing system first and protect continuity during a migration, then separately ask whether the underlying business logic deserves to change — and be precise afterward about which step produced which result."
   },
   {
     id:"contact-governance", tier:"deep", arc:"Govern",
@@ -963,10 +987,30 @@ const SKILL_GROUPS = [
   {label:"Marketing Automation & Lifecycle", items:["HubSpot Marketing Hub Enterprise"]},
   {label:"Intent & Enrichment", items:["Demandbase","ZoomInfo / Web Insights"]},
   {label:"Sales Engagement & Prospecting", items:["Amplemarket","LinkedIn Sales Navigator","Chorus"]},
+  {label:"Campaign Operations", items:["UTM tracking","Salesforce campaigns","HubSpot campaigns","HubSpot lists & workflows"]},
   {label:"Analytics & BI", items:["Tableau","Looker Studio","Power BI"]}
 ];
 
-const CAPABILITIES = ["GTM Systems Architecture","Revenue Operations","CRM Operations","Automation & Workflow Logic","Reporting & Analytics","Data Quality & Governance","Process Optimization","Routing & Lifecycle Management","Technology Evaluation","Cross-Functional Operations"];
+const CAMPAIGN_FLOW = [
+  {t:"UTM buildout", d:"Tagged URLs for campaign tracking"},
+  {t:"Salesforce + HubSpot campaigns", d:"Created and configured in both"},
+  {t:"URL + asset association", d:"Assigned to HubSpot campaigns"},
+  {t:"Lists + workflows", d:"Segmentation and campaign-related processes"},
+  {t:"Readiness + lead management", d:"Dependencies cleared, leads ready to flow"}
+];
+
+const CAMPAIGN_RESP = [
+  {t:"UTM tag buildout", d:"Building UTM-tagged URLs that support campaign tracking and attribution."},
+  {t:"Salesforce campaign build", d:"Creating and configuring campaigns in Salesforce."},
+  {t:"HubSpot campaign build", d:"Creating and configuring campaigns in HubSpot."},
+  {t:"URL and asset association", d:"Assigning the relevant URLs and marketing assets to HubSpot campaigns."},
+  {t:"HubSpot lists", d:"Creating and managing lists for campaign operations, segmentation, and related processes."},
+  {t:"HubSpot workflows", d:"Creating or configuring workflows that support campaign-related processes and operational requirements."},
+  {t:"Readiness and dependencies", d:"Coordinating outstanding requirements, information, assets, URLs, and lead-upload dependencies with stakeholders."},
+  {t:"Cross-platform coordination", d:"Supporting campaign operations across HubSpot and Salesforce, including how campaign configuration, tracking, and downstream lead management relate."}
+];
+
+const CAPABILITIES = ["GTM Systems Architecture","Revenue Operations","CRM Operations","Automation & Workflow Logic","Reporting & Analytics","Data Quality & Governance","Process Optimization","Campaign Operations","Lead Scoring & Qualification","Routing & Lifecycle Management","Technology Evaluation","Cross-Functional Operations"];
 
 const CERTS = [
   {t:"Salesforce Certified Administrator (SCA)", s:"Salesforce", d:"Issued Sep 2021"},
@@ -1119,6 +1163,12 @@ function toolFrameHTML(p, innerHtml){
 }
 
 function howItWorkedHTML(p){
+  if(p.stageFlow){
+    const flows = p.stageFlow.map(f=>`<div class="sf-multi-label">${f.label}</div>${flowHTML(f.steps)}`).join("");
+    const last = p.stageFlow[p.stageFlow.length-1].label;
+    const mock = p.uiMock ? `<div class="sf-multi-label">${last} — workflow view</div>${hsCanvasHTML(p.uiMock)}` : "";
+    return flows + mock;
+  }
   if(p.uiMock){
     const m = p.uiMock;
     if(m.type==="hubspot") return hsCanvasHTML(m);
@@ -1165,7 +1215,7 @@ function viewHome(){
         <a class="btn" href="#contact">Get in touch</a>
       </div>
       <div class="proof">
-        <div class="cell"><div class="num"><b>~10 → ~18</b>/wk</div><div class="cap">Qualified MQLs to Sales, after a lead-scoring rebuild</div></div>
+        <div class="cell"><div class="num"><b>~10 → ~18</b>/wk</div><div class="cap">Weekly MQLs to Sales, after a qualification redesign</div></div>
         <div class="cell"><div class="num"><b>~74k → ~60k</b></div><div class="cap">Marketing contacts — headroom created under an 80k cap</div></div>
         <div class="cell"><div class="num"><b>~80%</b> fewer</div><div class="cap">Irrelevant meetings reaching Sales, after a routing fix</div></div>
       </div>
@@ -1174,8 +1224,9 @@ function viewHome(){
     <section class="block">
       <div class="section-head"><h2>What I do</h2></div>
       <div class="do-list">
-        <div class="item"><span class="tag">Fix</span><div>I fix broken or noisy GTM processes — lead scoring, routing, database governance — and rebuild them on evidence, not guesswork.</div></div>
+        <div class="item"><span class="tag">Fix</span><div>I fix broken or noisy GTM processes — lead qualification, routing, database governance — and rebuild them on evidence, not guesswork.</div></div>
         <div class="item"><span class="tag">Connect</span><div>I work across Salesforce, HubSpot, Demandbase, and Amplemarket, and connect them to reporting in Tableau, Looker Studio, and Power BI.</div></div>
+        <div class="item"><span class="tag">Operate</span><div>I run the campaign operations that tie marketing execution to the CRM — UTM tracking, Salesforce and HubSpot campaign setup, lists, and workflows.</div></div>
         <div class="item"><span class="tag">Decide</span><div>I don't just administer these systems — I decide what's worth keeping, what needs fixing, and what should be decommissioned.</div></div>
       </div>
     </section>
@@ -1225,6 +1276,7 @@ function viewCaseStudy(id){
     <div class="cs-section">
       <span class="num">03 — The solution</span>
       <p>${p.solution}</p>
+      ${p.stages?`<div class="stage-grid">${p.stages.map(st=>`<div class="stage-card ${st.accent?'s2':''}"><div class="stage-tag">${st.tag}</div><h3>${st.t}</h3><p>${st.d}</p></div>`).join("")}</div>`:""}
     </div>
 
     <div class="cs-section">
@@ -1275,7 +1327,7 @@ function viewAbout(){
     <span class="eyebrow"><span class="dot"></span>About</span>
     <h1 style="margin-top:10px;font-size:clamp(1.8rem,4vw,2.4rem);">Systems, then strategy</h1>
     <p class="lede" style="margin-top:16px;">I'm a commercial data and operations professional with 5+ years working inside GTM and RevOps environments — most recently as a RevOps Specialist at CloudFactory, after progressing from Salesforce administration into HubSpot, Demandbase, and cross-platform reporting.</p>
-    <p style="max-width:64ch;margin-top:16px;color:var(--ink-soft);">I translate messy, multi-source data into insights that hold up, and turn business requirements into the system logic — scoring, routing, governance, dashboards — that makes them usable day to day. The tools I use aren't the point: what I actually do is audit a broken or noisy process, decide what's worth fixing versus decommissioning, build the fix, validate it against real data, and report on whether it worked.</p>
+    <p style="max-width:64ch;margin-top:16px;color:var(--ink-soft);">I translate messy, multi-source data into insights that hold up, and turn business requirements into the system logic — scoring, routing, governance, campaign setup, dashboards — that makes them usable day to day. The tools I use aren't the point: what I actually do is audit a broken or noisy process, decide what's worth fixing versus decommissioning, build the fix, validate it against real data, and report on whether it worked.</p>
 
     <section class="block">
       <div class="section-head"><h2>Progression</h2></div>
@@ -1312,6 +1364,14 @@ function viewSkills(){
     </div>
 
     <section class="block">
+      <div class="section-head"><h2>Campaign operations</h2></div>
+      <p style="max-width:64ch;color:var(--ink-soft);">The operational link between marketing execution, CRM systems, campaign tracking, automation, and lead management. This is hands-on build and coordination work across HubSpot and Salesforce — not campaign strategy, creative production, media buying, budgets, or campaign performance.</p>
+      <div class="ops-chain">${CAMPAIGN_FLOW.map((c,i)=>`<div class="ops-step"><div class="ops-card">${c.t}<small>${c.d}</small></div></div>`).join("")}</div>
+      <p class="muted" style="font-size:0.8rem;max-width:64ch;">A simplified overview of the responsibilities, not a claim that every campaign follows exactly this sequence.</p>
+      <div class="resp-grid">${CAMPAIGN_RESP.map(r=>`<div class="resp-item"><b>${r.t}</b>${r.d}</div>`).join("")}</div>
+    </section>
+
+    <section class="block">
       <div class="section-head"><h2>Core capability</h2></div>
       <div class="cap-pills">${CAPABILITIES.map(c=>`<span class="cap-pill">${c}</span>`).join("")}</div>
     </section>
@@ -1344,7 +1404,7 @@ function viewContact(){
       <div class="copy-hint" id="copy-hint"></div>
       <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line);">
         <a class="btn" href="cv/Juliet-Nyakoe-CV.pdf" target="_top" rel="noopener">Download CV (PDF)</a>
-        <p class="muted" style="margin-top:10px;font-size:0.8rem;">Opens in a new tab — use your browser's save/print option to keep a copy.</p>
+        <p class="muted" style="margin-top:10px;font-size:0.8rem;">Professional references are available on request.</p>
       </div>
     </div>
   </div>`;
